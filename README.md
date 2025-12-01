@@ -7,11 +7,7 @@ Here are some ideas to get you started:
 -->
 
 - 🔭 I’m currently working on something special.
-- 🌱 I’m currently learning something new.
-- 👯 I’m looking to collaborate on some speciall project.
-- 🤔 I’m looking for help with some very very tough case.
+- 🤔 I’m looking for help with some very tough case.
 - 💬 Ask me about something cool.
 - 📫 How to reach me: email me.
-- 😄 Pronouns: AK47
-- ⚡ Fun fact: Bitcoin
 
