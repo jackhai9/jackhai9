@@ -14,10 +14,22 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Check profile stats token
+        env:
+          PROFILE_STATS_TOKEN: ${{ secrets.PROFILE_STATS_TOKEN }}
+        run: |
+          if [ -z "$PROFILE_STATS_TOKEN" ]; then
+            echo "PROFILE_STATS_TOKEN is required for private repository statistics."
+            exit 1
+          fi
+
+      - name: Prepare profile output directory
+        run: mkdir -p profile
+
       - name: Generate 3D contribution profile
         uses: yoshi389111/github-profile-3d-contrib@v0.9.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PROFILE_STATS_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
           SETTING_JSON: ./3d-profile-settings.json
 
@@ -26,11 +38,27 @@ jobs:
           mv ./profile-3d-contrib/profile-3d.svg ./profile-3d.svg
           rm -rf ./profile-3d-contrib
 
+      - name: Generate GitHub stats card
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: stats
+          options: username=${{ github.repository_owner }}&count_private=true&include_all_commits=true&show_icons=true&custom_title=jackhai9%27s%20GitHub%20stats
+          path: profile/stats.svg
+          token: ${{ secrets.PROFILE_STATS_TOKEN }}
+
+      - name: Generate top languages card
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: top-langs
+          options: username=${{ github.repository_owner }}&theme=default&show_icons=true
+          path: profile/top-langs.svg
+          token: ${{ secrets.PROFILE_STATS_TOKEN }}
+
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md 3d-profile-settings.json profile-3d.svg
+          git add README.md 3d-profile-settings.json profile-3d.svg profile/stats.svg profile/top-langs.svg
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
