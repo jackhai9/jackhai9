@@ -3,6 +3,6 @@
 </p>
 
 <p align="center">
-  <img height="200" src="./profile/stats.svg" alt="jackhai9's GitHub stats" />
-  <img height="200" src="./profile/top-langs.svg" alt="Top languages" />
+  <img height="200" src="./profile/private-stats.svg" alt="jackhai9's GitHub stats" />
+  <img height="200" src="./profile/private-top-langs.svg" alt="Top languages" />
 </p>
