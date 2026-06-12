@@ -54,6 +54,12 @@ jobs:
           path: profile/private-top-langs.svg
           token: ${{ secrets.PROFILE_STATS_TOKEN }}
 
+      - name: Update README image cache keys
+        env:
+          CACHE_BUST: ${{ github.run_id }}
+        run: |
+          perl -0pi -e 's#(\./profile-3d\.svg)(\?v=[^"]*)?#$1?v=$ENV{CACHE_BUST}#g; s#(\./profile/private-stats\.svg)(\?v=[^"]*)?#$1?v=$ENV{CACHE_BUST}#g; s#(\./profile/private-top-langs\.svg)(\?v=[^"]*)?#$1?v=$ENV{CACHE_BUST}#g' README.md
+
       - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
