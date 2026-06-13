@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   update:
@@ -61,14 +62,28 @@ jobs:
         run: |
           perl -0pi -e 's#(\./profile-3d\.svg)(\?v=[^"]*)?#$1?v=$ENV{CACHE_BUST}#g; s#(\./profile/private-stats\.svg)(\?v=[^"]*)?#$1?v=$ENV{CACHE_BUST}#g; s#(\./profile/private-top-langs\.svg)(\?v=[^"]*)?#$1?v=$ENV{CACHE_BUST}#g' README.md
 
-      - name: Commit changes
+      - name: Commit changes through pull request
+        env:
+          GH_TOKEN: ${{ secrets.PROFILE_STATS_TOKEN }}
+          UPDATE_BRANCH: profile-readme-update
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$UPDATE_BRANCH"
           git add -A README.md 3d-profile-settings.json profile-3d.svg profile
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
           fi
           git commit -m "Update profile readme"
-          git push
+          git push --force-with-lease origin "$UPDATE_BRANCH"
+
+          if ! gh pr create \
+            --base main \
+            --head "$UPDATE_BRANCH" \
+            --title "Update profile readme" \
+            --body "Automated profile asset update from GitHub Actions run $GITHUB_RUN_ID."; then
+            gh pr view "$UPDATE_BRANCH" --json url --jq .url
+          fi
+
+          gh pr merge "$UPDATE_BRANCH" --squash --delete-branch
