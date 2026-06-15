@@ -2,8 +2,8 @@ name: Update readme
 
 on:
   schedule:
-    # Run at 22:37 Asia/Shanghai to avoid GitHub schedule delays crossing the contribution date boundary.
-    - cron: "37 14 * * *"
+    # Run at 18:37 Asia/Shanghai so GitHub schedule delays are less likely to cross midnight.
+    - cron: "37 10 * * *"
   workflow_dispatch:
 
 permissions:
