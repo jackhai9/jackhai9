@@ -6,6 +6,10 @@ on:
     - cron: "37 10 * * *"
   workflow_dispatch:
 
+concurrency:
+  group: profile-readme-update
+  cancel-in-progress: false
+
 permissions:
   contents: write
   pull-requests: write
@@ -67,6 +71,9 @@ jobs:
           GH_TOKEN: ${{ secrets.PROFILE_STATS_TOKEN }}
           UPDATE_BRANCH: profile-readme-update
         run: |
+          # An interrupted run can leave the update branch on the remote.
+          expected_remote=$(git ls-remote --heads origin "refs/heads/$UPDATE_BRANCH")
+          expected_sha=${expected_remote%%$'\t'*}
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -B "$UPDATE_BRANCH"
@@ -76,7 +83,8 @@ jobs:
             exit 0
           fi
           git commit -m "Update profile readme"
-          git push --force-with-lease origin "$UPDATE_BRANCH"
+          # An empty lease requires an absent branch; a SHA lease rejects concurrent changes.
+          git push --force-with-lease="refs/heads/$UPDATE_BRANCH:$expected_sha" origin "HEAD:refs/heads/$UPDATE_BRANCH"
 
           if ! gh pr create \
             --base main \
