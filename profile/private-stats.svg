@@ -9,7 +9,7 @@
         aria-labelledby="descId"
       >
         <title id="titleId">jackhai9&#39;s GitHub stats, Rank: A-</title>
-        <desc id="descId">Total Stars Earned: 46, Total Commits  : 2623, Total PRs: 800, Total Issues: 14, Contributed to (last year): 0</desc>
+        <desc id="descId">Total Stars Earned: 46, Total Commits  : 2640, Total PRs: 808, Total Issues: 14, Contributed to (last year): 0</desc>
         <style>
           .header {
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
@@ -73,7 +73,7 @@
         stroke-dashoffset: 251.32741228718345;
       }
       to {
-        stroke-dashoffset: 91.74410977685635;
+        stroke-dashoffset: 91.6643555954139;
       }
     }
   
@@ -199,7 +199,7 @@
         x="224.01"
         y="12.5"
         data-testid="prs"
-      >800</text>
+      >808</text>
     </g>
   </g><g transform="translate(0, 75)">
     <g class="stagger" style="animation-delay: 900ms" transform="translate(25, 0)">
